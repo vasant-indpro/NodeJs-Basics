@@ -1,5 +1,26 @@
 <!DOCTYPE html>
 <html long="en">
+
+<style>
+    body {
+        background-color: rgb(13, 167, 95);
+    }
+
+    h1 {
+        color: white;
+        text-align: center;
+    }
+
+    form {
+        text-align: center;
+    }
+
+    p {
+        font-family: verdana;
+        font-size: 12px;
+    }
+</style>
+
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,7 +29,26 @@
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
     <script src="main.js"></script>
 </head>
+
 <body>
     <h1>The Login Page</h1>
+    <div class="login-page">
+        <div class="form">
+            <!-- <form class="register-form">
+            <input type="text" placeholder="name"/>
+            <input type="password" placeholder="password"/>
+            <input type="text" placeholder="email address"/>
+            <button>create</button>
+            <p class="message">Already registered? <a href="#">Sign In</a></p>
+          </form> -->
+            <form class="login-form">
+                <input type="text" placeholder="Username" />
+                <input type="password" placeholder="Password" />
+                <button>Login</button>
+                <p class="message">Not registered? <a href="#">Create an account</a></p>
+            </form>
+        </div>
+    </div>
 </body>
+
 </html>

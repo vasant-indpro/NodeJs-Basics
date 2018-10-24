@@ -32,6 +32,7 @@ module.exports = {
 
             default:
                 response.writeHead(404);
+                response.write('Route not defined!');
                 response.end();
                 break;
         }
