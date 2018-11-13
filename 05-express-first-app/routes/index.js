@@ -7,11 +7,11 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/users', function(req, res, next) {
-  res.send('respond with a resource');
+  res.send('Users');
 });
 
 router.get('/users/detail', function(req, res, next) {
-  res.send('detail');
+  res.send('Detail');
 });
 
 module.exports = router;
