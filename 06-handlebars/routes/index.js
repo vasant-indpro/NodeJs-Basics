@@ -3,15 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
-
-router.get('/users', function(req, res, next) {
-  res.send('Users');
-});
-
-router.get('/users/detail', function(req, res, next) {
-  res.send('Detail');
+  res.render('index', { title: 'Express with Handlebars', condition: true, anyArray: [1, 2, 3] });
 });
 
 module.exports = router;
