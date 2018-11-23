@@ -55,7 +55,7 @@ router.post('/login-submit', function (req, res, next) {
         res.end("Login invalid");
       } else if (user.email === req.body.email && user.password === req.body.password) {
         console.log(user);
-        res.render('message', { title: "Hi "+ user.name, message: "You have logged in successfully."});
+        res.render('message', { title: "Hi "+ user.name, message: "You have logged in successfully.", showUsers: true});
       } else {
         res.end("Credentials wrong");
       }

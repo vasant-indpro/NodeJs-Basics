@@ -18,6 +18,12 @@
 <body>
     <h1>{{title}}</h1>
     <h2>{{message}}</h2>
+
+    {{# if showUsers}}
+    <form action="/users" method="get">
+        <input type="submit" value="Show user list">
+    </form>
+    {{/if}}
 </body>
 
 </html>
