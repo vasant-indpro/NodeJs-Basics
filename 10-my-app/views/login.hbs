@@ -1,4 +1,15 @@
 <div class="login-page">
+
+{{# if errors}}
+  <section>
+    <ul>
+      {{# each errors}}
+      <label style="color:red;">{{this.msg}}</label>
+      {{/each}}
+    </ul>
+  </section>
+  {{/if}}
+
   <div class="form">
     <form class="login-form" action="/login-submit" method="POST">
       <input type="text" placeholder="Email" name="email"/>

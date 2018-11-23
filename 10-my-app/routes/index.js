@@ -39,50 +39,85 @@ router.get('/users', function (req, res, next) {
 });
 
 router.post('/login-submit', function (req, res, next) {
+
   var email = req.body.email;
   var password = req.body.password;
   console.log("\n\n**************************");
   console.log("Email: " + email + "\nPassword: " + password);
   console.log("**************************\n\n");
 
-  mongo.MongoClient.connect(url, { useNewUrlParser: true }, function (error, db) {
-    assert.equal(null, error);
+  // Check validity
+  req.check('email', 'Invalid email address').isEmail();
+  req.check('password', 'Password is invalid').isLength({ min: 4 });
 
-    var dbo = db.db("test");
-    dbo.collection('users').findOne({ email: email }, function (error, user) {
+  var errors = req.validationErrors();
 
-      if (user === null) {
-        res.end("Login invalid");
-      } else if (user.email === req.body.email && user.password === req.body.password) {
-        console.log(user);
-        res.render('message', { title: "Hi "+ user.name, message: "You have logged in successfully.", showUsers: true});
-      } else {
-        res.end("Credentials wrong");
-      }
+  if (errors) {
+    // Invalid
+    req.session.errors = errors;
+    req.session.success = false;
+    res.render('login', { title: 'Login', errors: req.session.errors });
+  } else {
+    // Valid
+    req.session.success = true;
+
+    mongo.MongoClient.connect(url, { useNewUrlParser: true }, function (error, db) {
+      assert.equal(null, error);
+
+      var dbo = db.db("test");
+      dbo.collection('users').findOne({ email: email }, function (error, user) {
+
+        if (user === null) {
+          res.end("Login invalid");
+        } else if (user.email === req.body.email && user.password === req.body.password) {
+          console.log(user);
+          res.render('message', { title: "Hi " + user.name, message: "You have logged in successfully.", showUsers: true });
+        } else {
+          res.end("Credentials wrong");
+        }
+      });
     });
-  });
+  }
 });
 
 router.post('/register-submit', function (req, res, next) {
-  var item = {
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password
-  };
 
-  mongo.MongoClient.connect(url, { useNewUrlParser: true }, function (error, db) {
-    assert.equal(null, error);
-    var dbo = db.db("test");
-    var collection = dbo.collection('users');
+  // Check validity
+  req.check('name', 'Name can not be empty.').isLength({ min: 1 });
+  req.check('email', 'Invalid email address').isEmail();
+  req.check('password', 'Password is invalid').isLength({ min: 4 });
 
-    collection.insertOne(item, function (error, result) {
+  var errors = req.validationErrors();
+
+  if (errors) {
+    // Invalid
+    req.session.errors = errors;
+    req.session.success = false;
+    res.render('register', { title: 'Register', errors: req.session.errors });
+  } else {
+    // Valid
+    req.session.success = true;
+
+    var item = {
+      name: req.body.name,
+      email: req.body.email,
+      password: req.body.password
+    };
+
+    mongo.MongoClient.connect(url, { useNewUrlParser: true }, function (error, db) {
       assert.equal(null, error);
-      console.log('Item Inserted!');
-      console.log(item);
-      db.close();
-      res.redirect('/login');
+      var dbo = db.db("test");
+      var collection = dbo.collection('users');
+
+      collection.insertOne(item, function (error, result) {
+        assert.equal(null, error);
+        console.log('Item Inserted!');
+        console.log(item);
+        db.close();
+        res.redirect('/login');
+      });
     });
-  });
+  }
 });
 
 module.exports = router;
