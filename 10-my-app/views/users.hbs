@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{title}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="main.js"></script>
+
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 75%;
+        }
+        th,
+        td {
+            text-align: left;
+            padding: 8px;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    {{# if array}}
+    <table class="form">
+        <tr>
+            <th>Sl.No</th>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+        {{# each array as |value key|}}
+        <tr>
+            <td>{{key}}</td>
+            <td>{{this.name}}</td>
+            <td>{{this.email}}</td>
+        </tr>
+        {{/each}}
+    </table>
+    {{/if}}
+</body>
+
+</html>

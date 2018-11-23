@@ -18,6 +18,26 @@ router.get('/register', function (req, res, next) {
   res.render('register', { title: 'Register' });
 });
 
+router.get('/users', function (req, res, next) {
+
+  var resultArray = [];
+  mongo.MongoClient.connect(url, { useNewUrlParser: true }, function (error, db) {
+    assert.equal(null, error);
+
+    var dbo = db.db("test");
+    var cursor = dbo.collection('users').find();
+
+    cursor.forEach(function (doc, error) {
+      assert.equal(null, error);
+      resultArray.push(doc);
+      console.log(resultArray);
+    }, function () {
+      db.close();
+      res.render('users', { array: resultArray });
+    });
+  });
+});
+
 router.post('/login-submit', function (req, res, next) {
   var email = req.body.email;
   var password = req.body.password;
@@ -29,8 +49,17 @@ router.post('/login-submit', function (req, res, next) {
     assert.equal(null, error);
 
     var dbo = db.db("test");
-    var cursor = dbo.collection('users').find();
-    console.log(cursor);
+    dbo.collection('users').findOne({ email: email }, function (error, user) {
+
+      if (user === null) {
+        res.end("Login invalid");
+      } else if (user.email === req.body.email && user.password === req.body.password) {
+        console.log(user);
+        res.render('message', { title: "Hi "+ user.name, message: "You have logged in successfully."});
+      } else {
+        res.end("Credentials wrong");
+      }
+    });
   });
 });
 
@@ -52,26 +81,6 @@ router.post('/register-submit', function (req, res, next) {
       console.log(item);
       db.close();
       res.redirect('/login');
-    });
-  });
-});
-
-router.get('/users', function (req, res, next) {
-
-  var resultArray = [];
-  mongo.MongoClient.connect(url, { useNewUrlParser: true }, function (error, db) {
-    assert.equal(null, error);
-
-    var dbo = db.db("test");
-    var cursor = dbo.collection('users').find();
-
-    cursor.forEach(function (doc, error) {
-      assert.equal(null, error);
-      resultArray.push(doc);
-      console.log(resultArray);
-    }, function () {
-      db.close();
-      res.render('message', { array: resultArray });
     });
   });
 });
